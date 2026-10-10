@@ -1,0 +1,22 @@
+import styles from "./styles.module.css";
+
+import type React from "react";
+
+type DefaultButtonProps = {
+  icon: React.ReactNode;
+  color?: "red" | "green";
+} & React.ComponentProps<"button">;
+
+export function DefaultButton({
+  icon,
+  color = "green",
+  ...props
+}: DefaultButtonProps) {
+  return (
+    <>
+      <button className={`${styles.button} ${styles[color]}`} {...props}>
+        {icon}
+      </button>
+    </>
+  );
+}
