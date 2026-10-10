@@ -1,4 +1,5 @@
 import { Container } from "./components/Container.tsx";
+import { CountDown } from "./components/CountDown/index.tsx";
 import { Logo } from "./components/Logo/index.tsx";
 import { Menu } from "./components/Menu/index.tsx";
 
@@ -11,8 +12,13 @@ export function App() {
       <Container>
         <Logo />
       </Container>
+
       <Container>
         <Menu />
+      </Container>
+
+      <Container>
+        <CountDown />
       </Container>
     </>
   );
