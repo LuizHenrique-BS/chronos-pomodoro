@@ -1,4 +1,4 @@
-import { Container } from "../../components/Container.tsx";
+import { Container } from "../../components/Container/index.tsx";
 import { CountDown } from "../../components/CountDown";
 import { MainForm } from "../../components/MainForm";
 import { MainTemplate } from "../../templates/MainTemplate";
