@@ -5,13 +5,18 @@ import { DefaultInput } from "../DefaultInput";
 import { useRef } from "react";
 import type { TaskModel } from "../../models/TaskModel";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
+import { getNextCycle } from "../../utils/getNextCycle";
 
 export function MainForm() {
-  const { setState } = useTaskContext();
+  const { state, setState } = useTaskContext();
   const taskNameInput = useRef<HTMLInputElement>(null); // nao provoca re-renders ao digitar
 
+  // ciclos
+  const nextCycle = getNextCycle(state.currentCycle);
+  console.log(nextCycle);
+
   function handleCreateNewTask(event: React.SubmitEvent<HTMLFormElement>) {
-    event.preventDefault(); // para impedir o recarregamento da página
+    event.preventDefault(); // para impedir o recarregamento desnecessario do componente
 
     if (taskNameInput.current === null) return;
 
@@ -39,7 +44,7 @@ export function MainForm() {
         ...prevState,
         config: { ...prevState.config },
         activeTask: newTask,
-        currentCycle: 1, // Conferir
+        currentCycle: nextCycle, // Conferir
         secondsRemaining, // equivalente a 'secondsRemaining: secondsRemaining'
         formattedSecondsRemaining: "00:00",
         tasks: [...prevState.tasks, newTask],
