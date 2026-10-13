@@ -2,13 +2,13 @@ import { PlayCircleIcon } from "lucide-react";
 import { Cycles } from "../Cycles";
 import { DefaultButton } from "../DefaultButton";
 import { DefaultInput } from "../DefaultInput";
-import { useState } from "react";
+import { useRef } from "react";
 
 export function MainForm() {
-  const [taskName, setTaskName] = useState("");
+  const taskNameInput = useRef<HTMLInputElement>(null); // nao provoca re-renders ao digitar
 
   function handleCreateNewTask(event: React.SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
+    event.preventDefault(); // para impedir o recarregamento da página
 
     console.log("Deu certo!");
   }
@@ -22,13 +22,12 @@ export function MainForm() {
           type="text"
           title="Titulo"
           placeholder="Digite aqui"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
+          ref={taskNameInput}
         />
       </div>
 
       <div className="formRow">
-        <p>Lorem ipsum dolor sit amet.</p>
+        <p>Próximo intervalo é de 25min</p>
       </div>
 
       <div className="formRow">
