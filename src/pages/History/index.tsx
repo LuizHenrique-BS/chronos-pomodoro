@@ -8,6 +8,7 @@ import styles from "./styles.module.css";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext.ts";
 import { formatDate } from "../../utils/formatDate.ts";
 import { getTaskStatus } from "../../utils/getTaskStatus.ts";
+import { taskTypeDictionary } from "../../dictionary/taskTypeDictionary.ts";
 
 export function History() {
   const { state } = useTaskContext();
@@ -47,7 +48,7 @@ export function History() {
                     <td>{task.duration}min</td>
                     <td>{formatDate(task.startDate)}</td>
                     <td>{getTaskStatus(task, state?.activeTask)}</td>
-                    <td>{task.type}</td>
+                    <td>{taskTypeDictionary[task.type]}</td>
                   </tr>
                 );
               })}
