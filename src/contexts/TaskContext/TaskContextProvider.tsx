@@ -57,6 +57,10 @@ export function TaskContextProvider({ children }: TaskContextProviderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTask]);
 
+  useEffect(() => {
+    document.title = `${state.formattedSecondsRemaining} - Chronos Pomodoro`;
+  }, [state]);
+
   return (
     <TaskContext.Provider value={{ state, dispatch }}>
       {children}
