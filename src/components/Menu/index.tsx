@@ -27,7 +27,6 @@ export function Menu() {
   ) {
     event.preventDefault();
 
-    console.log("Clicado", Date.now());
 
     setTheme((prevTheme) => {
       return prevTheme === "dark" ? "light" : "dark";
