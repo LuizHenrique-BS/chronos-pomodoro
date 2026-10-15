@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer } from "react";
 import { TaskContext } from "./TaskContext";
 import { initialTaskState } from "./initialTaskState";
 import { taskReducer } from "./taskReducer";
@@ -11,49 +11,40 @@ type TaskContextProviderProps = {
 
 export function TaskContextProvider({ children }: TaskContextProviderProps) {
   const [state, dispatch] = useReducer(taskReducer, initialTaskState);
-
-  const worker = useRef<TimerWorkerManager | null>(null);
+  const { activeTask } = state;
 
   useEffect(() => {
-    if (!state.activeTask) {
-      console.log("Worker terminado por falta de activeTask");
-      worker.current?.terminate();
-      worker.current = null;
-      return;
-    }
+    if (!activeTask) return;
 
-    if (!worker.current) {
-      worker.current = TimerWorkerManager.getInstance();
+    const worker = TimerWorkerManager.getInstance();
 
-      worker.current.onmessage((e) => {
-        const countDownSeconds = e.data;
+    worker.onmessage((e) => {
+      const countDownSeconds = e.data;
+      console.log(countDownSeconds);
 
-        if (countDownSeconds <= 0) {
-          console.log("Worker COMPLETED");
-          dispatch({
-            type: TaskActionTypes.COMPLETE_TASK,
-          });
-          worker.current?.terminate();
-          worker.current = null;
-          return;
-        }
-
+      if (countDownSeconds <= 0) {
+        console.log("Worker COMPLETED");
+        dispatch({ type: TaskActionTypes.COMPLETE_TASK });
+      } else {
         dispatch({
           type: TaskActionTypes.COUNT_DOWN,
           payload: { secondsRemaining: countDownSeconds },
         });
-      });
+      }
+    });
 
-      worker.current.postMessage(state);
-    }
-  }, [state]);
+    worker.postMessage({
+      ...state,
+      activeTask,
+      secondsRemaining: activeTask.duration * 60,
+    });
 
-  useEffect(() => {
     return () => {
-      worker.current?.terminate();
-      worker.current = null;
+      console.log("Worker terminado por cleanup");
+      worker.terminate();
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTask]);
 
   return (
     <TaskContext.Provider value={{ state, dispatch }}>
