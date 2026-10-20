@@ -11,6 +11,7 @@ import { getTaskStatus } from "../../utils/getTaskStatus.ts";
 import { taskTypeDictionary } from "../../dictionary/taskTypeDictionary.ts";
 import { sortTasks, type SortTasksOptions } from "../../utils/sortTasks.ts";
 import { useMemo, useState } from "react";
+import { showMessage } from "../../adapters/showMessage.ts";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions.ts";
 
 export function History() {
@@ -37,9 +38,14 @@ export function History() {
   }
 
   function handleResetHistory() {
-    if (!confirm("Tem certeza que deseja apagar o histórico")) return;
-
-    dispatch({ type: TaskActionTypes.RESET_STATE });
+    showMessage.dismiss();
+    showMessage.confirm("Tem certeza?", (confirmation) => {
+      if (confirmation) {
+        console.log("APAGAR histórico", confirmation);
+        dispatch({ type: TaskActionTypes.RESET_STATE });
+      }
+      return;
+    });
   }
 
   return (
