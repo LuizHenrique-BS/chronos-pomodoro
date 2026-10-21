@@ -10,7 +10,7 @@ import { formatDate } from "../../utils/formatDate.ts";
 import { getTaskStatus } from "../../utils/getTaskStatus.ts";
 import { taskTypeDictionary } from "../../dictionary/taskTypeDictionary.ts";
 import { sortTasks, type SortTasksOptions } from "../../utils/sortTasks.ts";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { showMessage } from "../../adapters/showMessage.ts";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions.ts";
 
@@ -47,6 +47,13 @@ export function History() {
       return;
     });
   }
+
+  useEffect(() => {
+    console.log("Componente desmontado");
+    return () => {
+      showMessage.dismiss();
+    };
+  }, []);
 
   return (
     <MainTemplate>
