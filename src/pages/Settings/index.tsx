@@ -7,9 +7,10 @@ import { MainTemplate } from "../../templates/MainTemplate/index.tsx";
 import { useRef, useState } from "react";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext.ts";
 import { showMessage } from "../../adapters/showMessage.ts";
+import { TaskActionTypes } from "../../contexts/TaskContext/taskActions.ts";
 
 export function Settings() {
-  const { state } = useTaskContext();
+  const { state, dispatch } = useTaskContext();
   const [formErrors, setFormErrors] = useState<string[]>([]);
   // const formErrors: string[] = [];
 
@@ -48,7 +49,11 @@ export function Settings() {
       return;
     }
 
-    console.log("Salvar");
+    dispatch({
+      type: TaskActionTypes.CHANGE_SETTINGS,
+      payload: { workTime, shortBreakTime, longBreakTime },
+    });
+    showMessage.success("Configurações salvas");
   }
 
   return (
