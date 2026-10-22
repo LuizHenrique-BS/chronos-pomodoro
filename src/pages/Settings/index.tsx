@@ -4,10 +4,12 @@ import { DefaultButton } from "../../components/DefaultButton/index.tsx";
 import { DefaultInput } from "../../components/DefaultInput/index.tsx";
 import { Heading } from "../../components/Heading/index.tsx";
 import { MainTemplate } from "../../templates/MainTemplate/index.tsx";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext.ts";
 import { showMessage } from "../../adapters/showMessage.ts";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions.ts";
+import { taskTypeDictionary } from "../../dictionary/taskTypeDictionary.ts";
+import { pagesDictionary } from "../../dictionary/pagesDictionary.ts";
 
 export function Settings() {
   const { state, dispatch } = useTaskContext();
@@ -17,6 +19,10 @@ export function Settings() {
   const workTimeInputRef = useRef<HTMLInputElement | null>(null);
   const shortBreakTimeInputRef = useRef<HTMLInputElement | null>(null);
   const longBreakTimeInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    document.title = `${pagesDictionary.settings} - ${pagesDictionary.title}`;
+  }, []);
 
   function handleSaveSettings(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,14 +37,20 @@ export function Settings() {
     }
 
     if (workTime < 1 || workTime > 99) {
-      formErrors.push("Digite valores entre 1 e 99 para Foco");
+      formErrors.push(
+        `Digite valores entre 1 e 99 para ${taskTypeDictionary["workTime"]}`,
+      );
     }
 
     if (shortBreakTime < 1 || shortBreakTime > 30) {
-      formErrors.push("Digite valores entre 1 e 30 para descanso Curto");
+      formErrors.push(
+        `Digite valores entre 1 e 30 para ${taskTypeDictionary["shortBreakTime"]}`,
+      );
     }
     if (longBreakTime < 1 || longBreakTime > 60) {
-      formErrors.push("Digite valores entre 1 e 60 para descanso longo");
+      formErrors.push(
+        `Digite valores entre 1 e 60 para ${taskTypeDictionary["longBreakTime"]}`,
+      );
     }
 
     if (formErrors.length > 0) {
@@ -73,8 +85,8 @@ export function Settings() {
           <div className="formRow">
             <DefaultInput
               id="workTime"
-              labelText="Foco"
-              aria-label="Foco"
+              labelText={taskTypeDictionary["workTime"]}
+              aria-label={taskTypeDictionary["workTime"]}
               ref={workTimeInputRef}
               defaultValue={state.config.workTime}
               type="number"
@@ -88,8 +100,8 @@ export function Settings() {
           <div className="formRow">
             <DefaultInput
               id="shortBreackTime"
-              labelText="Descanso curto"
-              aria-label="Descanso curto"
+              labelText={taskTypeDictionary["shortBreakTime"]}
+              aria-label={taskTypeDictionary["shortBreakTime"]}
               ref={shortBreakTimeInputRef}
               defaultValue={state.config.shortBreakTime}
               type="number"
@@ -98,8 +110,8 @@ export function Settings() {
           <div className="formRow">
             <DefaultInput
               id="longBreackTime"
-              labelText="Descanso longo"
-              aria-label="Descanso longo"
+              labelText={taskTypeDictionary["longBreakTime"]}
+              aria-label={taskTypeDictionary["longBreakTime"]}
               ref={longBreakTimeInputRef}
               defaultValue={state.config.longBreakTime}
               type="number"

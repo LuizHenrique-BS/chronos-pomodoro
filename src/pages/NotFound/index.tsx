@@ -1,10 +1,16 @@
+import { useEffect } from "react";
 import { Container } from "../../components/Container";
 import { GenericHtml } from "../../components/GenericHtml";
 import { Heading } from "../../components/Heading";
 import { RouterLink } from "../../components/RouterLink";
 import { MainTemplate } from "../../templates/MainTemplate";
+import { pagesDictionary } from "../../dictionary/pagesDictionary";
 
 export function NotFound() {
+  useEffect(() => {
+    document.title = `${pagesDictionary.notFound} - ${pagesDictionary.title}`;
+  }, []);
+
   return (
     <MainTemplate>
       <Container>
@@ -30,7 +36,7 @@ export function NotFound() {
           <p>
             Enquanto isso, fica aqui uma reflexão: "Se uma página não existe na
             internet, será que ela existiu de verdade?" 🤔💭
-        </p>
+          </p>
         </GenericHtml>
       </Container>
     </MainTemplate>

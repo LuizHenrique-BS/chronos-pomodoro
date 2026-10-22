@@ -1,10 +1,16 @@
+import { useEffect } from "react";
 import { Container } from "../../components/Container";
 import { GenericHtml } from "../../components/GenericHtml";
 import { Heading } from "../../components/Heading";
 import { RouterLink } from "../../components/RouterLink";
 import { MainTemplate } from "../../templates/MainTemplate";
+import { pagesDictionary } from "../../dictionary/pagesDictionary";
 
 export function AboutPomodoro() {
+  useEffect(() => {
+    document.title = `${pagesDictionary.aboutText} - ${pagesDictionary.title}`;
+  }, []);
+
   return (
     <MainTemplate>
       <Container>

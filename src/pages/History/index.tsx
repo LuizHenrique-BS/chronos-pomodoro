@@ -13,6 +13,7 @@ import { sortTasks, type SortTasksOptions } from "../../utils/sortTasks.ts";
 import { useEffect, useMemo, useState } from "react";
 import { showMessage } from "../../adapters/showMessage.ts";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions.ts";
+import { pagesDictionary } from "../../dictionary/pagesDictionary.ts";
 
 export function History() {
   const { state, dispatch } = useTaskContext();
@@ -49,7 +50,8 @@ export function History() {
   }
 
   useEffect(() => {
-    console.log("Componente desmontado");
+    document.title = `${pagesDictionary.history} - ${pagesDictionary.title}`;
+
     return () => {
       showMessage.dismiss();
     };
