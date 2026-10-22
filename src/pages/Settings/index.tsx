@@ -4,23 +4,51 @@ import { DefaultButton } from "../../components/DefaultButton/index.tsx";
 import { DefaultInput } from "../../components/DefaultInput/index.tsx";
 import { Heading } from "../../components/Heading/index.tsx";
 import { MainTemplate } from "../../templates/MainTemplate/index.tsx";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext.ts";
+import { showMessage } from "../../adapters/showMessage.ts";
 
 export function Settings() {
   const { state } = useTaskContext();
+  const [formErrors, setFormErrors] = useState<string[]>([]);
+  // const formErrors: string[] = [];
+
   const workTimeInputRef = useRef<HTMLInputElement | null>(null);
   const shortBreakTimeInputRef = useRef<HTMLInputElement | null>(null);
   const longBreakTimeInputRef = useRef<HTMLInputElement | null>(null);
 
   function handleSaveSettings(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
+    showMessage.dismiss();
 
-    const workTime = workTimeInputRef.current?.value;
-    const shortBreakTime = shortBreakTimeInputRef.current?.value;
-    const longBreakTime = longBreakTimeInputRef.current?.value;
+    const workTime = Number(workTimeInputRef.current?.value);
+    const shortBreakTime = Number(shortBreakTimeInputRef.current?.value);
+    const longBreakTime = Number(longBreakTimeInputRef.current?.value);
 
-    console.log(workTime, shortBreakTime, longBreakTime);
+    if (isNaN(workTime) || isNaN(shortBreakTime) || isNaN(longBreakTime)) {
+      formErrors.push("Digite apenas números para TODOS os campos!");
+    }
+
+    if (workTime < 1 || workTime > 99) {
+      formErrors.push("Digite valores entre 1 e 99 para Foco");
+    }
+
+    if (shortBreakTime < 1 || shortBreakTime > 30) {
+      formErrors.push("Digite valores entre 1 e 30 para descanso Curto");
+    }
+    if (longBreakTime < 1 || longBreakTime > 60) {
+      formErrors.push("Digite valores entre 1 e 60 para descanso longo");
+    }
+
+    if (formErrors.length > 0) {
+      formErrors.forEach((error: string) => {
+        showMessage.error(error);
+      });
+      setFormErrors([]);
+      return;
+    }
+
+    console.log("Salvar");
   }
 
   return (
@@ -44,6 +72,12 @@ export function Settings() {
               aria-label="Foco"
               ref={workTimeInputRef}
               defaultValue={state.config.workTime}
+              type="number"
+              // min='1'
+              // max='99'
+              // maxLength={2}
+              // step={2}
+              // size={2}
             />
           </div>
           <div className="formRow">
@@ -53,6 +87,7 @@ export function Settings() {
               aria-label="Descanso curto"
               ref={shortBreakTimeInputRef}
               defaultValue={state.config.shortBreakTime}
+              type="number"
             />
           </div>
           <div className="formRow">
@@ -62,6 +97,7 @@ export function Settings() {
               aria-label="Descanso longo"
               ref={longBreakTimeInputRef}
               defaultValue={state.config.longBreakTime}
+              type="number"
             />
           </div>
           <div className="formRow">
